@@ -1,10 +1,6 @@
-// This #include statement was automatically added by the Particle IDE.
+//Additional libraries necessary for this project
 #include "MQTT/MQTT.h"
-
-// This #include statement was automatically added by the Particle IDE.
 #include "Adafruit_DHT/Adafruit_DHT.h"
-
-// This #include statement was automatically added by the Particle IDE.
 #include "SparkJson/SparkJson.h"
 
 //Where are the modules connected?
@@ -27,7 +23,7 @@ const int led = D7;
 int ledState = LOW;
 unsigned long lastPublishTime = 0;
 unsigned long lastBlinkTime = 0;
-int publishingPeriod = 400;
+int publishingPeriod = 400;     //It's longer since the temperature sensor is very slow!
 
 //The values of humidity and temperature will be stored here
 float h;
@@ -44,9 +40,9 @@ void setup()
     RGB.control(true);
     Serial.begin(9600);
     Serial.println("Hello there, I'm your Photon!");
-    //setup our LED pin
+    //Setup our LED pin
     pinMode(led, OUTPUT);
-    //set 200ms as minimum publishing period
+    //200ms is the minimum publishing period
     publishingPeriod = publishingPeriod > 200 ? publishingPeriod : 200;
     //This initializes the sensor
     dht.begin();
@@ -81,34 +77,36 @@ boolean isExposedToWater()
 	else return false;
 }
 
-/////////////////////////////////////
+//This is the callback function, necessary for the MQTT communication
 void callback(char* topic, byte* payload, unsigned int length);
-//create our instance of MQTT object
+//Create our instance of MQTT object
 MQTT client(MQTT_SERVER, 1883, callback);
-//implement our callback method thats called on receiving data from a subscribed topic
+//Implement our callback method that's called on receiving data from a subscribed topic
 void callback(char* topic, byte* payload, unsigned int length) {
-  //store the received payload and convert it to string
+  //Store the received payload and convert it to string
   char p[length + 1];
   memcpy(p, payload, length);
   p[length] = NULL;
-  //print the topic and the payload received
+  //Print the topic and the received payload
   Serial.println("topic: " + String(topic));
   Serial.println("payload: " + String(p));
-  //call our method to parse and use the payload received
+  //Call our method to parse and use the received payload
   handlePayload(p);
 }
 
 void handlePayload(char* payload) {
   StaticJsonBuffer<200> jsonBuffer;
-  //convert payload to json
+  //Convert payload to json
   JsonObject& json = jsonBuffer.parseObject(payload);
   if (!json.success()) {
     Serial.println("json parsing failed");
     return;
   }
-  //get value of the key "command"
+  //Get the value of the key "command", aka. listen to incoming commands
   const char* command = json["command"];
   Serial.println("parsed command: " + String(command));
+  
+  //We can send commands to change the color of the RGB
   if (String(command).equals("color"))
   {
     const char* color = json["value"];
@@ -121,33 +119,36 @@ void handlePayload(char* payload) {
       RGB.color(0, 0, 255);
     else if (s.equals("green"))
       RGB.color(0, 255, 0);
+    else if (s.equals("orange"))
+      RGB.color(255, 70, 0);
+    else if (s.equals("yellow"))
+      RGB.color(255, 150, 0);
   }
 }
-//////////////////////////////////
 
-//////////////////////////////////
+//This function establishes the connection with the MQTT server
 void mqtt_connect() {
-  Serial.println("Connecting to mqtt server...");
+  Serial.println("Connecting to MQTT server...");
   if (client.connect(MQTT_CLIENTID, MQTT_USER, MQTT_PASSWORD)) {
     Serial.println("Connection successful! Subscribing to topic...");
-    //subscribe to a topic
+    //This one subscribes to the topic "cmd", so we can listen to commands
     client.subscribe("/v1/"DEVICE_ID"/cmd");
   }
   else {
     Serial.println("Connection failed! Check your credentials or WiFi network");
   }
 }
-//////////////////////////////////
 
+//This is for the LED to blink
 void blink(int interval) {
   if (millis() - lastBlinkTime > interval) {
-    // save the last time you blinked the LED
+    //Save the last time you blinked the LED
     lastBlinkTime = millis();
     if (ledState == LOW)
       ledState = HIGH;
     else
       ledState = LOW;
-    // set the LED with the ledState of the variable:
+    //Set the LED with the ledState of the variable:
     digitalWrite(led, ledState);
   }
 }
@@ -184,13 +185,10 @@ void loop()
         Serial.println("Retrying...");
         mqtt_connect();
     }
-    //Serial.println(z);
-    //Serial.println(Kalman);
-    //Serial.println(digitalRead(M1));
-    
+        
     // Wait a few seconds between measurements
 	delay(2000);
-
+        
     // Reading temperature or humidity takes about 250 ms!
     // Sensor readings may also be up to 2s 'old' (it's a very slow sensor!)
 	h = dht.getHumidity();
@@ -198,7 +196,7 @@ void loop()
 	t = dht.getTempCelcius();
     // Read temperature as Farenheit
 	float f = dht.getTempFarenheit();
-  
+        
     // Check if any reads failed and exit early (to try again)
 	if (isnan(h) || isnan(t) || isnan(f)) {
 		Serial.println("Failed to read from DHT sensor!");
@@ -210,40 +208,47 @@ void loop()
 	float hi = dht.getHeatIndex();
 	float dp = dht.getDewPoint();
 	float k = dht.getTempKelvin();
-    
+        
 }
 
-
-
+//Publish function; here we add what we want to send to the cloud
 void publish() {
   //Create our JsonArray
   StaticJsonBuffer<300> pubJsonBuffer;
   JsonArray& root = pubJsonBuffer.createArray();
 
+//-------------------------------------------------
 //   //First object: Water sensor
 //   JsonObject& leaf1 = root.createNestedObject();
 //   //This is how we name what we are sending
-//   leaf1["meaning"] = "water";
+//   leaf1["meaning"] = "w";
 //   //This contains the readings of the sensor
 //   leaf1["value"] = isExposedToWater();
+//-------------------------------------------------
   
+//-------------------------------------------------  
   //Second object: Humidity sensor
   JsonObject& leaf2 = root.createNestedObject();
   //This is how we name what we are sending
-  leaf2["meaning"] = "humidity";
+  leaf2["meaning"] = "h";
   //This contains the readings of the sensor
   leaf2["value"] = h;
+//-------------------------------------------------
   
+//-------------------------------------------------  
   //Third object: Temperature sensor
   JsonObject& leaf3 = root.createNestedObject();
   //This is how we name what we are sending
-  leaf3["meaning"] = "temperature";
+  leaf3["meaning"] = "t";
   //This contains the readings of the sensor
   leaf3["value"] = t;
+//-------------------------------------------------
 
   char message_buff[128];
   root.printTo(message_buff, sizeof(message_buff));
   client.publish("/v1/"DEVICE_ID"/data", message_buff);
   Serial.println("Publishing " + String(message_buff));
 }
+
+
 
