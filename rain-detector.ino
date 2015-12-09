@@ -135,7 +135,7 @@ void blink(int interval) {
       ledState = HIGH;
     else
       ledState = LOW;
-    //Set the LED with the ledState of the variable:
+    //Set the LED with the ledState of the variable
     digitalWrite(led, ledState);
   }
 }
