@@ -23,7 +23,7 @@ const int led = D7;
 int ledState = LOW;
 unsigned long lastPublishTime = 0;
 unsigned long lastBlinkTime = 0;
-int publishingPeriod = 400;     //It's longer since the temperature sensor is very slow!
+int publishingPeriod = 400;     //Value given in ms
 
 //The values of humidity and temperature will be stored here
 float h;
