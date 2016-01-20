@@ -1,4 +1,4 @@
-*Please be aware that this documentation is a* ***work in progress!*** *I'll be updating it as time allows. Word :)*
+*Please be aware that this documentation is a* ***work in progress!*** *I'll be updating it as time allows. Word! :)*
 
 --
 
