@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WUNDERBAR-BASED DASHBOARD</title>
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/foundation.css">
+<link rel="stylesheet" href="css/style.css">
+
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/relayr-browser-sdk.min.js"></script>
+<script src="js/custom.js"></script>
+</head>
+
+<body>
+	<div class="row">
+    <div class="grid">
+        <div class="row">
+            <div class="small-4 columns">
+                <h3>It's so comfy here!</h3>
+                <font color="black">Powered by</font> <font color="blue"><b>relayr</b></font>
+            </div>
+            <div class="small-4 columns text-center">
+                <span id="timetext"></span>
+                <br>Berlin, Germany</div>
+            <div class="small-4 columns text-right">
+                <img src="svg/temperature-01.svg" width="50" height="50">
+                <img src="svg/humidity-02.svg" width="50" height="50">
+                <img src="svg/luminoisity-05.svg" width="50" height="50">
+            </div>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="large-4 columns">
+                <div class="panel widget-4x">
+                    <div class="panelhead red">
+                        <h1>TEMPERATURE</h1>
+                    </div>
+                    <div class="panelbody">
+                        <img src="svg/temperature-01.svg" width="150" height="150">
+                        <h1 class="big">
+                        <span id="temp"></span><small>&deg;C</small>
+                    </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="large-4 columns">
+                <div class="panel widget-4x">
+                    <div class="panelhead blue">
+                        <h1>HUMIDITY</h1>
+                    </div>
+                    <div class="panelbody">
+                        <img src="svg/humidity-02.svg" width="150" height="150">
+                        <h1 class="big">
+                        <span id="humid"></span><small>%</small>
+                    </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="large-4 columns">
+                <div class="panel widget-4x">
+                    <div class="panelhead yellow">
+                        <h1>LUMINOSITY</h1></div>
+                    <div class="panelbody">
+                        <img src="svg/luminoisity-05.svg" width="150" height="150">
+                        <h1 class="big">
+                        <span id="lumi"></span><small>%</small>
+                    </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="row">
+        <h1>relayr</h1></div>
+    <div class="row">
+        <div class="large-2 columns">
+            <ul class="inline-list righ">
+                <h4>ABOUT</h4>
+                <li><a href="https://relayr.io/about" target="_blank">Overview</a>
+                    <a href="https://relayr.io/team" target="_blank">Team</a>
+                    <a href="https://relayr.io/press" target="_blank">Press</a>
+                    <a href="https://relayr.io/partners" target="_blank">Partners</a>
+                    <a href="https://relayr.io/jobs" target="_blank">Jobs</a>
+                    <a href="https://relayr.io/imprint" target="_blank">Imprint</a>
+                    <a href="https://relayr.io/page/contact" target="_blank">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <div class="large-2 columns">
+            <ul class="inline-list righ">
+                <h4>WUNDERBAR</h4>
+                <li>
+                    <a href="https://relayr.io/wunderbar" target="_blank">Details</a>
+                </li>
+            </ul>
+        </div>
+        <div class="large-2 columns">
+            <ul class="inline-list righ">
+                <h4 class="center">DEVELOPERS</h4>
+                <li>
+                    <a href="https://developer.relayr.io/" target="_blank">Dashboard</a>
+                    <a href="https://developer.relayr.io/documents/Welcome/Introduction" target="_blank">Documentation</a>
+                    <a href="https://developer.relayr.io/documents/Support/FAQs" target="_blank">FAQs</a>
+                </li>
+            </ul>
+        </div>
+        <div class="large-2 columns">
+            <ul class="inline-list righ">
+                <h4 class="center">COMMUNITY</h4>
+                <li>
+                    <a href="http://forum.relayr.io/" target="_blank">Forum</a>
+                    <a href="http://blog.relayr.io/" target="_blank">Blog</a>
+                    <a href="http://relayr.io/events" target="_blank">Events</a>
+                </li>
+            </ul>
+        </div>
+        <div class="large-2 columns">
+            <ul class="social inline-list righ">
+                <h4 class="center">SOCIAL</h4>
+                <li>
+                    <a href="https://github.com/relayr" target="_blank"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/relayr_cloud" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/relayr" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a href="https://www.youtube.com/user/relayr" target="_blank"><i class="fa fa-youtube"></i></a>
+                    <a href="http://www.pinterest.com/relayr_cloud/" target="_blank"><i class="fa fa-pinterest"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+</body>
+
+</html>
