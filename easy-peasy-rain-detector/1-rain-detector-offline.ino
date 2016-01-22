@@ -41,8 +41,8 @@ void soundAlarm()
 boolean isExposedToWater()
 {
 	if(digitalRead(WATER_SENSOR) == LOW){
-        return true;
         Serial.println("Raindrops are falling on my... sensor...");
+        return true;
 	}
             		    
 	else return false;
